@@ -10,16 +10,18 @@ import (
 func (s *APIServer) Run() error {
 	router := mux.NewRouter()
 	router.HandleFunc("/api/revisions/{id}", makeHTTPHandlerFunc(s.GetRevisionByID))
-	router.HandleFunc("/api/revisions/add", makeHTTPHandlerFunc(s.AddRevision))
+	router.HandleFunc("/api/revisions/add", makeHTTPHandlerFunc(s.PostRevision))
 
 	return nil
 }
 
 func (s *APIServer) GetRevisionByID(w http.ResponseWriter, r *http.Request) error {
+	vars := mux.Vars(r)
+
 	return nil
 }
 
-func (s *APIServer) AddRevision(w http.ResponseWriter, r *http.Request) error {
+func (s *APIServer) PostRevision(w http.ResponseWriter, r *http.Request) error {
 	revision := new(Revision)
 	err := json.NewDecoder(r.Body).Decode(revision)
 

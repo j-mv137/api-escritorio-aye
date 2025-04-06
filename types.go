@@ -11,9 +11,10 @@ type Revision struct {
 	Tipo        string         `json:"tipo"`
 	Fecha       civil.DateTime `json:"fecha"`
 	Nombre      string         `json:"nombre"`
-	Descripcion string         `json:"descripcion"`
 	Domicilio   string         `json:"domicilio"`
 	Telefono    string         `json:"telefono"`
+	Estado      string         `json:"estado"`
+	Descripcion string         `json:"descripcion"`
 }
 
 type APIServer struct {
