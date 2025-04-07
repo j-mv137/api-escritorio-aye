@@ -3,8 +3,8 @@ package main
 import "database/sql"
 
 type Storage interface {
-	AddRevision(*Revision) error
-	GetRevisionByState(state string) ([]Revision, error)
+	AddOrder(*Order) error
+	GetOrderByState(state string) ([]*Order, error)
 }
 
 type PostgresDB struct {
@@ -24,12 +24,12 @@ func NewPostgressDB() (*PostgresDB, error) {
 	}
 
 	return &PostgresDB{
-		store: postgresStore,
+		db: postgresStore,
 	}, nil
 }
 
-func (s *PostgresDB) AddRevision(r *Revision) error {
-	q := `INSERT INTO revisiones 
+func (s *PostgresDB) AddOrder(r *Order) error {
+	q := `INSERT INTO ordenes 
 		(tipo, fecha, nombre, descripcion, domicilio, telefono) 
 		values ($1, $2, $3, $4, $5, $6);`
 
@@ -50,32 +50,32 @@ func (s *PostgresDB) AddRevision(r *Revision) error {
 	return nil
 }
 
-func (s *PostgresDB) GetRevisionByState(state string) ([]*Revision, error) {
+func (s *PostgresDB) GetOrderByState(state string) ([]*Order, error) {
 	q := `SELECT * FROM revisiones WHERE estado=$1;`
 
 	rows, err := s.db.Query(q, state)
 
-	revisions := []*Revision{}
+	orders := []*Order{}
 
 	if err != nil {
 		return nil, err
 	}
 
 	for rows.Next() {
-		revision, err := scanRevision(rows)
+		order, err := scanOrder(rows)
 
 		if err != nil {
 			return nil, err
 		}
 
-		revisions = append(revisions, revision)
+		orders = append(orders, order)
 	}
 
-	return revisions, nil
+	return orders, nil
 }
 
-func scanRevision(rows *sql.Rows) (*Revision, error) {
-	rev := &Revision{}
+func scanOrder(rows *sql.Rows) (*Order, error) {
+	rev := &Order{}
 
 	err := rows.Scan(
 		&rev.Id,

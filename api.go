@@ -9,27 +9,26 @@ import (
 
 func (s *APIServer) Run() error {
 	router := mux.NewRouter()
-	router.HandleFunc("/api/revisions/{id}", makeHTTPHandlerFunc(s.GetRevisionByID))
-	router.HandleFunc("/api/revisions/add", makeHTTPHandlerFunc(s.PostRevision))
+	router.HandleFunc("/api/orders/{state}", makeHTTPHandlerFunc(s.GetOrderByState))
+	router.HandleFunc("/api/orders/add", makeHTTPHandlerFunc(s.PostOrder))
 
 	return nil
 }
 
-func (s *APIServer) GetRevisionByID(w http.ResponseWriter, r *http.Request) error {
-	vars := mux.Vars(r)
+func (s *APIServer) GetOrderByState(w http.ResponseWriter, r *http.Request) error {
 
 	return nil
 }
 
-func (s *APIServer) PostRevision(w http.ResponseWriter, r *http.Request) error {
-	revision := new(Revision)
-	err := json.NewDecoder(r.Body).Decode(revision)
+func (s *APIServer) PostOrder(w http.ResponseWriter, r *http.Request) error {
+	order := new(Order)
+	err := json.NewDecoder(r.Body).Decode(order)
 
 	if err != nil {
 		return err
 	}
 
-	err = s.Store.AddRevision(revision)
+	err = s.Store.AddOrder(order)
 
 	if err != nil {
 		return err

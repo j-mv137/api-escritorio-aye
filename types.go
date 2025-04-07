@@ -6,7 +6,7 @@ import (
 	"cloud.google.com/go/civil"
 )
 
-type Revision struct {
+type Order struct {
 	Id          int            `json:"id"`
 	Tipo        string         `json:"tipo"`
 	Fecha       civil.DateTime `json:"fecha"`
